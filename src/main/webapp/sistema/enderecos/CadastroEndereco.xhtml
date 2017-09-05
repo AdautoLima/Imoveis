@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<ui:composition template="../../principal/principal.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+		
+	<f:metadata>
+		<o:viewParam name="id" value="#{cadastroEnderecoBean.endereco}" />
+		<f:viewAction action="#{cadastroEnderecoBean.prepararCadastro}" />
+	</f:metadata>
+	
+	<ui:define name="corpo">
+		<h1>Cadastro de Endereço</h1>
+		<h:form id="formCadastro">
+			
+			<p:messages showDetail="false" showSummary="true" autoUpdate="true" />
+			
+			<p:panelGrid columns="2">
+				
+				<p:outputLabel value="Tipo de Logradouro" for="tipoLogradouro" />
+				<p:selectOneMenu id="tipoLogradouro" value="#{cadastroEnderecoBean.endereco.tipoLogradouro}" effect="clip">								  
+    				<f:selectItem noSelectionOption="true" itemLabel="Selecione..." />
+    				<f:selectItems value="#{cadastroEnderecoBean.tiposLogradouro}" var="tipoLogradouro" 
+    							   itemValue="#{tipoLogradouro}" itemLabel="#{tipoLogradouro.descricao}" />
+    			</p:selectOneMenu>
+									
+				<p:outputLabel value="Logradouro" for="logradouro" />
+				<p:autoComplete id="logradouro" size="80" value="#{cadastroEnderecoBean.endereco.logradouro}"
+								completeMethod="#{cadastroEnderecoBean.pesquisarLogradouros}" />
+				
+				<p:outputLabel value="Número" for="numero" />
+				<p:inputText size="10" value="#{cadastroEnderecoBean.endereco.numero}" id="numero" />
+								
+				<p:outputLabel value="Complemento" for="complemento" />
+				<p:inputText size="65" value="#{cadastroEnderecoBean.endereco.complemento}" id="complemento" />
+
+				<p:outputLabel value="Bairro" for="bairro" />
+				<p:inputText size="65" value="#{cadastroEnderecoBean.endereco.bairro}" id="bairro" />
+				
+				<p:outputLabel value="CEP" for="cep" />
+				<p:inputMask mask="99999-999" value="#{cadastroEnderecoBean.endereco.cep}" id="cep"/>
+				
+				<p:outputLabel value="Cidade" for="cidade" />
+				<p:inputText size="50" value="#{cadastroEnderecoBean.endereco.cidade}" id="cidade" />
+				
+				<p:outputLabel value="Estado" for="estado" />
+				<p:selectOneMenu id="estado" value="#{cadastroEnderecoBean.endereco.estado}" effect="clip"
+								 converter="omnifaces.SelectItemsConverter">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione um Estado!"/>
+					<f:selectItems value="#{cadastroEnderecoBean.todosEstados}" var="estado" 
+								   itemValue="#{estado}" itemLabel="#{estado.descricao}" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Data Cadastro:" for="dataCadastro" />
+				<p:inputText size="15" id="dataCadastro" value="#{cadastroEnderecoBean.endereco.dataCadastro.time}"  
+							 style="background-color:#D3D3D3;" readonly="true" > 
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+				</p:inputText>
+				
+				<p:outputLabel value="Data Alteracao:" for="dataAlteracao" />
+				<p:inputText size="15" id="dataAlteracao" value="#{cadastroEnderecoBean.endereco.dataAlteracao.time}"  
+							 style="background-color:#D3D3D3;" readonly="true" > 
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+				</p:inputText>
+	
+				<p:outputLabel />
+				<p:commandButton value="Salvar" action="#{cadastroEnderecoBean.salvar}" icon="ui-icon-disk" update="@form" />
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

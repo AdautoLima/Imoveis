@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<ui:composition template="../../principal/principal.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<f:metadata>
+		<o:viewParam name="id" value="#{cadastroProprietarioBean.proprietario}" />	
+		<f:viewAction action="#{cadastroProprietarioBean.prepararCadastro}" />
+	</f:metadata>
+	
+	<ui:define name="corpo">
+		<h1>Cadastro de Proprietários</h1>
+		<h:form id="formCadastro">
+			
+			<p:messages showDetail="false" showSummary="true" autoUpdate="true" />
+			<p:focus for="painel" />
+			
+			<p:panelGrid id="painel" columns="2">
+				<p:outputLabel value="Nome" for="nome" />
+				<p:autoComplete id="nome" size="80" value="#{cadastroProprietarioBean.proprietario.nome}" />
+				
+				<p:outputLabel value="Situação" for="situacao" />
+				<p:selectOneRadio id="situacao" value="#{cadastroProprietarioBean.proprietario.situacao}">
+					<f:selectItem itemLabel="Ativo" itemValue="A" />
+					<f:selectItem itemLabel="Inativo" itemValue="I" />
+				</p:selectOneRadio>
+											
+				<p:outputLabel value="RG" for="rg" />
+				<p:inputText size="15" value="#{cadastroProprietarioBean.proprietario.rg}" id="rg" />
+
+				<p:outputLabel value="CPF" for="cpf" />
+				<p:inputMask mask="999.999.999-99" value="#{cadastroProprietarioBean.proprietario.cpf}" 
+							 id="cpf" />
+				
+				<p:outputLabel value="Data Nascimento:" for="dataNascimento" />
+				<p:calendar size="12" id="dataNascimento" pattern="dd/MM/yyyy" locale="pt_BR"
+							value="#{cadastroProprietarioBean.proprietario.dataNascimento.time}" />
+				
+				<p:outputLabel value="Endereço" for="endereco" />
+					<p:selectOneMenu value="#{cadastroProprietarioBean.proprietario.endereco}" id="endereco"
+									 converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="Selecione um endereço" noSelectionOption="true" />
+						<f:selectItems value="#{cadastroProprietarioBean.todosEnderecos}" var="endereco" 
+									   itemValue="#{endereco}" itemLabel="#{endereco.logradouro}" />
+				</p:selectOneMenu>
+															
+				<p:outputLabel value="Data Cadastro:" for="dataCadastro" />
+				<p:inputText size="15" id="dataCadastro" value="#{cadastroProprietarioBean.proprietario.dataCadastro.time}"  
+							 style="background-color:#D3D3D3;" readonly="true" > 
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+				</p:inputText>
+				
+				<p:outputLabel value="Data Alteracao:" for="dataAlteracao" />
+				<p:inputText size="15" id="dataAlteracao" value="#{cadastroProprietarioBean.proprietario.dataAlteracao.time}"  
+							 style="background-color:#D3D3D3;" readonly="true" > 
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+				</p:inputText>
+	
+			
+				<p:outputLabel />
+				<p:commandButton value="Salvar" action="#{cadastroProprietarioBean.salvar}" icon="ui-icon-disk" update="@form" />
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+
+
+<!-- 
+
+<h:outputLabel id="lbPessoa" value="*Pessoa: " for="pessoa"
+                                style="float: right;" />
+                            <h:selectOneRadio id="pessoa" value="#{clienteBean.cliente.pessoa}" required="true"
+                                requiredMessage="Campo [Pessoa] é obrigatório." >
+                                <f:selectItem itemLabel="Jurídica" itemValue="Jurídica" />
+                                <f:selectItem itemLabel="Física" itemValue="Física" />
+                                <p:ajax event="change" update="frmCliente" process="@this"/> 
+                            </h:selectOneRadio>
+
+                            <h:outputLabel id="lbCpf" value="CPF:" for="cpf" rendered="#{clienteBean.cliente.pessoa=='Física'}"
+                                style="float: right;" />
+                            <p:inputMask mask="999.999.999-99" id="cpf" size="25" rendered="#{clienteBean.cliente.pessoa=='Física'}"
+                                value="#{clienteBean.cliente.cpf}" />
+
+                            <h:outputLabel id="lbCnpj" value="CNPJ:" for="cnpj" rendered="#{clienteBean.cliente.pessoa=='Jurídica'}"
+                                style="float: right;" /> 
+                            <p:inputMask mask="99.999.999/9999-99" id="cnpj" size="25" rendered="#{clienteBean.cliente.pessoa=='Jurídica'}"
+                                value="#{clienteBean.cliente.cnpj}" />
+
+
+
+ -->

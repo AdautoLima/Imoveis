@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<ui:composition template="../../principal/principal.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<f:metadata>
+		<f:viewAction action="#{consultaEnderecosBean.consultar}" />
+	</f:metadata>
+	
+	
+	<ui:define name="corpo">
+		<h1>Consulta de Endereços</h1>
+		<h:form id="formConsulta">
+			
+			<p:messages showDetail="false" showSummary="true" autoUpdate="true" />
+									
+			<p:dataTable value="#{consultaEnderecosBean.enderecos}" var="endereco" border="1" 
+						 cellspacing="0" cellpadding="2" paginator="true" rows="5" paginatorPosition="bottom">
+				
+				<p:column headerText="Tipo Logradouro" style="text-align:left;width:580px">
+					<h:outputText value="#{endereco.tipoLogradouro} #{endereco.logradouro}, #{endereco.numero}
+					 - #{endereco.complemento} - #{endereco.bairro}" />
+				</p:column>				
+								
+				<p:column headerText="CEP" style="text-align:center; width:50px">
+					<h:outputText value="#{endereco.cep}" />
+				</p:column>
+	
+				<p:column headerText="Cidade" style="text-align:left;width:90px">
+					<h:outputText value="#{endereco.cidade}" />
+				</p:column>
+
+				<p:column headerText="UF" style="text-align:center; width:20px;">
+					<h:outputText value="#{endereco.estado.sigla}" />
+				</p:column>
+				
+				<p:column headerText="Data de Cadastro" style="text-align:center;width:100px">
+					<h:outputText value="#{endereco.dataCadastro.time}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+				    </h:outputText>  		
+				</p:column>
+
+				<p:column headerText="Data de Alteração" style="text-align:center;width:100px">
+					<h:outputText value="#{endereco.dataAlteracao.time}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+					</h:outputText>	
+				</p:column>
+				
+				<p:column headerText="Operações" style="text-align:center;width:50px">
+					<p:button icon="ui-icon-pencil" title="Editar" outcome="/sistema/enderecos/CadastroEndereco">
+						<f:param name="id" value="#{endereco.id}" />						
+					</p:button>	
+					
+					<p:commandButton icon="ui-icon-trash" title="Excluir" process="@this" update="@form" 
+									 action="#{consultaEnderecosBean.excluir}">
+						<f:setPropertyActionListener value="#{endereco}" target="#{consultaEnderecosBean.enderecoSelecionado}" />
+					</p:commandButton>				
+				</p:column>							
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
