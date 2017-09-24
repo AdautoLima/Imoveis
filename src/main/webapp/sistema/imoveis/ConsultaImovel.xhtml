@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<ui:composition template="../../principal/principal.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<f:metadata>
+		<f:viewAction action="#{consultaImoveisBean.consultar}" />
+	</f:metadata>
+	
+	
+	<ui:define name="corpo">
+		<h1>Consulta de Imóveis</h1>
+		<h:form id="formConsulta">
+			
+			<p:messages showDetail="false" showSummary="true" autoUpdate="true" />
+									
+			<p:dataTable value="#{consultaImoveisBean.imoveis}" var="imovel" border="1" 
+						 cellspacing="0" cellpadding="2" paginator="true" rows="15" paginatorPosition="bottom">
+								
+								
+				<p:column headerText="Endereço" style="text-align:left; width:180px;">
+					<h:outputText value="#{imovel.endereco.logradouro}, #{imovel.endereco.numero}" />
+				</p:column>
+				
+				<p:column headerText="Área Serviço" style="text-align:center;width:10px">
+					<h:outputText value="#{imovel.areaServicoDescricao}" />
+				</p:column>				
+								
+				<p:column headerText="Sobrado" style="text-align:center; width:10px">
+					<h:outputText value="#{imovel.sobradoDescricao}" />
+				</p:column>
+	
+				<p:column headerText="Garagem" style="text-align:right;width:30px">
+					<h:outputText value="#{imovel.garagem}" />
+				</p:column>
+
+				<p:column headerText="Mictório" style="text-align:right;width:30px">
+					<h:outputText value="#{imovel.mictorio}" />
+				</p:column>
+				
+				<p:column headerText="Quarto" style="text-align:right;width:25px">
+					<h:outputText value="#{imovel.quarto}" />
+				</p:column>
+				
+				<p:column headerText="Suite" style="text-align:right;width:25px">
+					<h:outputText value="#{imovel.suite}" />
+				</p:column>
+				
+				<p:column headerText="Proprietário" style="text-align:center; width:70px;">
+					<h:outputText value="#{imovel.proprietario.nome}" />
+				</p:column>
+				
+				<p:column headerText="Usuário Cadastro" style="text-align:center; width:70px;">
+					<h:outputText value="#{imovel.usuarioCadastro.nome}" />
+				</p:column>
+				
+				<p:column headerText="Data de Cadastro" style="text-align:center;width:90px">
+					<h:outputText value="#{imovel.dataCadastro.time}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+				    </h:outputText>  		
+				</p:column>
+
+				<p:column headerText="Usuário Alteração" style="text-align:center; width:70px;">
+					<h:outputText value="#{imovel.usuarioAlteracao.nome}" />
+				</p:column>
+				
+				<p:column headerText="Data de Alteração" style="text-align:center;width:90px">
+					<h:outputText value="#{imovel.dataAlteracao.time}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+					</h:outputText>	
+				</p:column>
+				
+				<p:column headerText="Operações" style="text-align:center;width:50px">
+					<p:button icon="ui-icon-pencil" title="Editar" outcome="/sistema/imoveis/CadastroImovel">
+						<f:param name="id" value="#{imovel.id}" />						
+					</p:button>	
+					
+					<p:commandButton icon="ui-icon-trash" title="Excluir" process="@this" update="@form" 
+									 action="#{consultaImoveisBean.excluir}">
+						<f:setPropertyActionListener value="#{imovel}" target="#{consultaImoveisBean.imovelSelecionado}" />
+					</p:commandButton>				
+				</p:column>							
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

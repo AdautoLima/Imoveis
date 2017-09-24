@@ -21,7 +21,7 @@
 			<p:dataTable value="#{consultaEnderecosBean.enderecos}" var="endereco" border="1" 
 						 cellspacing="0" cellpadding="2" paginator="true" rows="5" paginatorPosition="bottom">
 				
-				<p:column headerText="Tipo Logradouro" style="text-align:left;width:580px">
+				<p:column headerText="Tipo Logradouro" sortBy="#{endereco.tipoLogradouro} #{endereco.logradouro}" style="text-align:left;width:580px">
 					<h:outputText value="#{endereco.tipoLogradouro} #{endereco.logradouro}, #{endereco.numero}
 					 - #{endereco.complemento} - #{endereco.bairro}" />
 				</p:column>				

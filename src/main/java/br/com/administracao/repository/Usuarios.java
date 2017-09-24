@@ -1,18 +1,20 @@
 package br.com.administracao.repository;
 
 import java.io.Serializable;
- 
+
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
- 
+
 import br.com.administracao.model.Usuario;
 import br.com.administracao.util.Uteis;
  
  
 public class Usuarios implements Serializable {
- 
- 
+ 	
 	private static final long serialVersionUID = 1L;
  
+	private EntityManager manager;
+	
 	public Usuario ValidaUsuario(Usuario usuarioModel){
  
 		try {
@@ -32,7 +34,9 @@ public class Usuarios implements Serializable {
 			return null;
 		}
  
- 
- 
+	}
+	
+	public Usuario porId(Integer id) {
+		return this.manager.find(Usuario.class, id);
 	}
 }	

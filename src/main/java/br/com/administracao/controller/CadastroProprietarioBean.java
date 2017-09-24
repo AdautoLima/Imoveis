@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -14,6 +13,7 @@ import br.com.administracao.model.Proprietario;
 import br.com.administracao.repository.Enderecos;
 import br.com.administracao.repository.Proprietarios;
 import br.com.administracao.service.NegocioException;
+import br.com.administracao.util.FacesUtil;
 import br.com.administracao.util.Transactional;
 
 @Named
@@ -32,18 +32,19 @@ public class CadastroProprietarioBean implements Serializable {
 	private Enderecos enderecos;
 		
 	private List<Endereco> todosEnderecos;
-		
+	
 	public void prepararCadastro() {
 						
 		this.todosEnderecos = enderecos.todos();	
 		
 		if (this.proprietario == null) {
 			this.proprietario = new Proprietario();			
-		}	
+		}
 		
-		if (proprietario.getId() == null){
+		if (proprietario.getId() == null){			
 			proprietario.setDataCadastro(Calendar.getInstance());
 		}else{
+			this.proprietario = proprietarios.porId(proprietario.getId());
 			proprietario.setDataAlteracao(Calendar.getInstance());
 		}	
 	}
@@ -51,12 +52,9 @@ public class CadastroProprietarioBean implements Serializable {
 	public List<String> pesquisarNomes(String nome) {
 		return this.proprietarios.nomesQueContem(nome);
 	}
-	
-	
+		
 	@Transactional
 	public void salvar() throws NegocioException {
-		FacesContext context = FacesContext.getCurrentInstance();
-		
 		if (proprietario.getId() == null){
 			proprietario.setDataCadastro(Calendar.getInstance());
 		}else{
@@ -66,7 +64,7 @@ public class CadastroProprietarioBean implements Serializable {
 		this.proprietarios.guardar(proprietario);
 			
 		this.proprietario = new Proprietario();
-		context.addMessage(null, new FacesMessage("Proprietario salvo com sucesso!"));
+		FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Proprietário salvo com sucesso!");
 	}
 
 	public Proprietario getProprietario() {
@@ -92,5 +90,5 @@ public class CadastroProprietarioBean implements Serializable {
 	public void setEnderecos(Enderecos enderecos) {
 		this.enderecos = enderecos;
 	}
-		
+	
 }

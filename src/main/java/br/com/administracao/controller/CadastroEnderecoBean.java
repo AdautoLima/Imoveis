@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -15,6 +14,7 @@ import br.com.administracao.model.TipoLogradouro;
 import br.com.administracao.repository.Enderecos;
 import br.com.administracao.repository.Estados;
 import br.com.administracao.service.NegocioException;
+import br.com.administracao.util.FacesUtil;
 import br.com.administracao.util.Transactional;
 
 @Named
@@ -57,18 +57,18 @@ public class CadastroEnderecoBean implements Serializable {
 			
 	@Transactional
 	public void salvar() throws NegocioException {
-		FacesContext context = FacesContext.getCurrentInstance();
-		
 		if (endereco.getId() == null)
 			endereco.setDataCadastro(Calendar.getInstance());
 		else
 			endereco.setDataAlteracao(Calendar.getInstance());
-						
-		this.enderecos.guardar(endereco);
-		//enderecos.adicionar(this.endereco);
-			
-		this.endereco = new Endereco();
-		context.addMessage(null, new FacesMessage("Endereço salvo com sucesso!"));
+								
+		if (enderecos.comDadosIguais(endereco) != null){
+			FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Este endereço já está cadastrado na base!");			
+		}else{
+			this.enderecos.guardar(endereco);
+			this.endereco = new Endereco();
+			FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Endereço salvo com sucesso!");			
+		}
 	}
 
 	public List<Estado> getTodosEstados() {

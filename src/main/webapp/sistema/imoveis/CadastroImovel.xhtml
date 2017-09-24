@@ -1,159 +1,113 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
-	<h:head>
-		<title><ui:insert name="titulo">Cadastro de Imóvel</ui:insert>	</title>
-		<h:outputStylesheet library="css" name="default.css" />
-	</h:head>
-	
-	<h:body>
+<ui:composition template="../../principal/principal.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+		
+	<f:metadata>
+		<o:viewParam name="id" value="#{cadastroImovelBean.imovel.id}" />	
+		<f:viewAction action="#{cadastroImovelBean.prepararCadastro}" />
+	</f:metadata>
+		
+	<ui:define name="corpo">
+		<h1>Cadastro de Imóvel</h1>
 		<h:form id="formCadastro" >
-			<h1>Cadastro de Imóvel</h1>
-			
-			<p:toolbar style="margin-top: 20px">
-				<p:toolbarGroup>
-					<p:button value="Novo" outcome="/sistema/imoveis/CadastroImovel" />
-					<p:separator />
-					<p:commandButton value="Salvar" id="botaoSalvar" />
-				</p:toolbarGroup>	
-				<p:toolbarGroup align="right">
-					<p:button value="Pesquisa" outcome="/sistema/imoveis/PesquisaImoveis" />
-				</p:toolbarGroup>
-			</p:toolbar>
 			
 			<p:messages showDetail="false" showSummary="true" autoUpdate="true" />
+			<p:focus for="painel" />
 			
-			<p:panelGrid columns="2">
-				<p:panelGrid columns="2">	
-					<p:selectBooleanCheckbox id="inativo" />					
-					<p:outputLabel value="Inativo" for="inativo" />
-				</p:panelGrid>
+			<p:panelGrid id="painel" columns="2">
+											
+				<h:panelGroup id="grupo" rendered="#{cadastroImovelBean.imovel.id != null}">
+					<p:selectBooleanCheckbox id="inativo" value="cadastroImovelBean.imovel.inativo" style="font-color:red"/>
+					&#160;
+					<p:outputLabel value="Inativo" />
+				</h:panelGroup>
+				<p:outputLabel rendered="#{cadastroImovelBean.imovel.id != null}" />
 				
-				<p:panelGrid columns="2">	
-					<p:outputLabel value="Número:" for="numero" />
-					<p:inputText size="6" id="numero" />
-				</p:panelGrid>
-			</p:panelGrid>	
-				
-			<br />
-			<p:outputLabel value="Endereço do Imóvel:" />
-			<hr />
-			<p:panelGrid columns="4">
-				<p:outputLabel value="Logradouro:" for="logradouroImovel" />
-				<p:inputText size="80" id="logradouroImovel" />
+				<p:outputLabel value="Endereço" for="endereco" />
+				<p:selectOneMenu value="#{cadastroImovelBean.imovel.endereco}" id="endereco"
+								 converter="omnifaces.SelectItemsConverter"
+								 required="true" requiredMessage="O campo Endereço é obrigatório!">
+					<f:selectItem itemLabel="Selecione um endereço" noSelectionOption="true" />
+					<f:selectItems value="#{cadastroImovelBean.todosEnderecos}" var="endereco" 
+								   itemValue="#{endereco}" itemLabel="#{endereco.tipoLogradouro} #{endereco.logradouro}, #{endereco.numero}" />
+				</p:selectOneMenu>
 								
-				<p:outputLabel value="Complemento:" for="complementoImovel" />
-				<p:inputText size="40" id="complementoImovel" />
-				
-				<p:outputLabel value="CEP:" for="cepImovel" />
-	 			<p:inputMask id="cepImovel" mask="99999-999"/>
-	 				
-				<p:outputLabel value="Bairro:" for="bairroImovel" />
-				<p:inputText size="65" id="bairroImovel" />
-					
-				<p:outputLabel value="Cidade:" for="cidadeImovel" />
-				<p:inputText size="50" id="cidadeImovel" />
-					
-				<p:outputLabel value="Estado:" for="ufImovel" />
-				<p:inputText size="2" id="ufImovel" /> 				
-			</p:panelGrid>	
-
-			<br />
-			<p:outputLabel value="Características:" />
-			<hr />
-			<p:panelGrid columns="4">
-			
-				<p:outputLabel value="Comodo(s):" for="comodo" />
-				<p:inputText size="3" id="comodo" />
-			
-				<p:outputLabel value="Banheiro(s):" for="banheiro" />
-				<p:inputText size="3" id="banheiro" />
-
-				<p:outputLabel value="Suite(s):" for="suite" />
-				<p:inputText size="3" id="suite" />
-				
-				<p:outputLabel value="Vaga(s) garagem:" for="garagem" />
-				<p:inputText size="3" id="garagem" />
-				
+				<p:outputLabel value="Área de Serviço:" for="areaServico" />
+				<p:selectOneRadio id="areaServico" value="#{cadastroImovelBean.imovel.areaServico}"
+								  required="true" requiredMessage="O campo Área de Serviço é obrigatório!">								  
+					<f:selectItem itemLabel="Sim" itemValue="S" />
+					<f:selectItem itemLabel="Não" itemValue="N" />
+				</p:selectOneRadio>	
+																
 				<p:outputLabel value="Sobrado:" for="sobrado" />
-				<h:selectOneRadio id="sobrado">
-					<f:selectItem itemValue="1" itemLabel="Sim"/>
-					<f:selectItem itemValue="0" itemLabel="Não"/>
-				</h:selectOneRadio>
+				<p:selectOneRadio id="sobrado" value="#{cadastroImovelBean.imovel.sobrado}"
+								  required="true" requiredMessage="O campo Sobrado é obrigatório!">								  
+					<f:selectItem itemLabel="Sim" itemValue="S" />
+					<f:selectItem itemLabel="Não" itemValue="N" />
+				</p:selectOneRadio>
+																		
+				<p:outputLabel value="Quarto:" for="quarto" />
+				<p:inputText size="2" id="quarto" value="#{cadastroImovelBean.imovel.quarto}"
+							 required="true" requiredMessage="O campo Quarto é obrigatório!"/>
 				
-				<p:outputLabel value="Área serviço:" for="areaServico" />
-				<h:selectOneRadio id="areaServico">
-					<f:selectItem itemValue="1" itemLabel="Sim"/>
-					<f:selectItem itemValue="0" itemLabel="Não"/>
-				</h:selectOneRadio>
+				<p:outputLabel value="Suite:" for="suite" />
+				<p:inputText size="2" id="suite" value="#{cadastroImovelBean.imovel.suite}"
+							 required="true" requiredMessage="O campo Suite é obrigatório!"/>
 				
-				<p:outputLabel value="Caixa de Água (Litros):" for="caixaAgua" />
-				<p:inputText size="7" id="caixaAgua" />
+				<p:outputLabel value="Mictório:" for="mictorio" />
+				<p:inputText size="2" id="mictorio" value="#{cadastroImovelBean.imovel.mictorio}"
+							 required="true" requiredMessage="O campo Mictório é obrigatório!"/>
 				
-				<p:outputLabel value="Valor aluguel" for="valorAluguel" />
-        		<p:inputText id="valorAluguel">
-        			<f:convertNumber type="currency"/>
-        		</p:inputText>
+				<p:outputLabel value="Garagem:" for="garagem" />
+				<p:inputText size="2" id="garagem" value="#{cadastroImovelBean.imovel.garagem}"
+							 required="true" requiredMessage="O campo Garagem é obrigatório!"/>
 				
-				<p:outputLabel value="Data de Cadastro:" for="dataCadastro" />
-				<p:calendar id="dataCadastro" size="12" pattern="dd/MM/yyyy" />
-									
-				<p:outputLabel value="Data de Alteração:" for="dataAlteracao" />
-				<p:calendar id="dataAlteracao" size="12" pattern="dd/MM/yyyy" />
-			</p:panelGrid>
-
-			
-			panelGroup
-			
-			
-			<br />
-			<p:outputLabel value="Proprietário:" />
-			<hr />
-			<p:panelGrid columns="4">
-			
-				<p:outputLabel value="Nome:" for="nome" />
-				<p:inputText size="80" id="nome" />
+				<p:outputLabel value="Proprietário" for="proprietario" />
+				<p:selectOneMenu value="#{cadastroImovelBean.imovel.proprietario}" id="proprietario" required="true"
+								 converter="omnifaces.SelectItemsConverter" requiredMessage="O campo Proprietário é obrigatório!">
+					<f:selectItem itemLabel="Selecione um proprietário" noSelectionOption="true" />
+					<f:selectItems value="#{cadastroImovelBean.todosProprietarios}" var="proprietario" 
+							   	   itemValue="#{proprietário}" itemLabel="#{proprietário.nome}" />
+				</p:selectOneMenu>
 				
-				<p:outputLabel value="RG:" for="rg" />
-				<p:inputText size="20" id="rg" />
-			
-				<p:outputLabel value="CPF:" for="cpf" />
- 				<p:inputMask id="cpf" mask="999.999.999-99"/>
-
-				<p:outputLabel value="Telefone fixo:" for="telefone" />
-				<p:inputMask id="telefone" mask="(99)9999-9999"/>
-
-				<p:outputLabel value="Celular:" for="celular" />
-				<p:inputMask id="celular" mask="(99)99999-9999"/>
-			</p:panelGrid>
+				<p:outputLabel value="Observações:" />
+				<h:panelGroup>
+					<p:inputTextarea rows="8" cols="30" counter="display" maxlength="240" counterTemplate="{0} caracteres." 
+									 autoResize="false" value="#{cadastroImovelBean.imovel.observacoes}" />
+	    			<h:outputText id="display" />
+	    		</h:panelGroup>	
+								
+				<p:outputLabel value="Data Cadastro:" for="dataCadastro" />
+				<p:inputText size="15" id="dataCadastro" value="#{cadastroImovelBean.imovel.dataCadastro.time}"  
+							 style="background-color:#D3D3D3;" readonly="true" > 
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+				</p:inputText>
 				
-			<br />
-			<p:outputLabel value="Endereço Proprietário:" />
-			<hr />
-			<p:panelGrid columns="4">
-
-				<p:outputLabel value="Logradouro:" for="logradouroProprietario" />
-				<p:inputText size="80" id="logradouroProprietario" />
-
-				<p:outputLabel value="Complemento:" for="complementoProprietario" />
-				<p:inputText size="40" id="complementoProprietario" />
-
-				<p:outputLabel value="CEP:" for="cepProprietario" />
- 				<p:inputMask id="cepProprietario" mask="99999-999"/>
- 				
-				<p:outputLabel value="Bairro:" for="bairroProprietario" />
-				<p:inputText size="65" id="bairroProprietario" />
+				<p:outputLabel value="Data Alteracao:" for="dataAlteracao" />
+				<p:inputText size="15" id="dataAlteracao" value="#{cadastroImovelBean.imovel.dataAlteracao.time}"  
+							 style="background-color:#D3D3D3;" readonly="true" > 
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Sao_Paulo" />
+				</p:inputText>
 				
-				<p:outputLabel value="Cidade:" for="cidadeProprietario" />
-				<p:inputText size="50" id="cidadeProprietario" />
+				<p:outputLabel value="Usuario Cadastro:" for="usuarioCadastro" />
+				<p:inputText id="usuarioCadastro" value="#{cadastroImovelBean.imovel.usuarioCadastro.nome}"  
+							 style="background-color:#D3D3D3;" readonly="true" /> 
+					
+				<p:outputLabel value="Usuário Alteracao:" for="usuarioAlteracao"/>
+				<p:inputText id="usuarioAlteracao" value="#{cadastroImovelBean.imovel.usuarioAlteracao.nome}"  
+							 style="background-color:#D3D3D3;" readonly="true" /> 				
 				
-				<p:outputLabel value="Estado:" for="ufProprietario" />
-				<p:inputText size="2" id="ufProprietario" />
-			</p:panelGrid>
-				
-			
+				<p:outputLabel/>
+				<h:panelGroup>
+					<p:commandButton value="Salvar" action="#{cadastroImovelBean.salvar}" icon="ui-icon-disk" update="@form" />
+					<p:commandButton value="Cancelar" action="#{cadastroImovelBean.cancelar}" imediate="true"/>
+				</h:panelGroup>	
+			</p:panelGrid>			
 		</h:form>
-	</h:body>
-	
-</html>
+	</ui:define>
+</ui:composition>

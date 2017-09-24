@@ -1,7 +1,7 @@
 package br.com.administracao.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,7 +17,9 @@ import javax.validation.constraints.NotNull;
 
 @Table(name = "proprietario")
 @Entity
-public class Proprietario {
+public class Proprietario implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 	private String nome;
@@ -45,8 +47,6 @@ public class Proprietario {
 		this.id = id;
 	}
 
-	//@NotEmpty(message = "O campo Nome é obrigatório")
-	//@Size(max = 80)
 	@Column(length = 80, nullable = false)
 	public String getNome() {
 		return nome;
@@ -56,8 +56,6 @@ public class Proprietario {
 		this.nome = nome;
 	}
 
-	//@NotEmpty(message = "O campo RG é obrigatório")
-	//@Size(max = 15)
 	@Column(length = 15, nullable = false)
 	public String getRg() {
 		return rg;
@@ -67,9 +65,7 @@ public class Proprietario {
 		this.rg = rg;
 	}
 
-	//@NotNull(message = "O campo CPF é obrigatório!")
-	//@Size(max = 14)
-	@Column(length = 14)
+	@Column(length = 14, nullable = false)
 	public String getCpf() {
 		return cpf;
 	}
@@ -98,8 +94,7 @@ public class Proprietario {
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
-
-	@NotNull
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "data_cadastro", nullable = false)
 	public Calendar getDataCadastro() {
@@ -120,7 +115,6 @@ public class Proprietario {
 		this.dataAlteracao = dataAlteracao;
 	}
 
-	//@NotNull
 	@Column(length = 1, nullable = false)
 	public char getSituacao() {
 		return situacao;
@@ -129,7 +123,6 @@ public class Proprietario {
 	public void setSituacao(char situacao) {
 		this.situacao = situacao;
 	}
-
 	
 	@ManyToOne
 	@JoinColumn(name = "usuarioCadastro_id")
@@ -176,7 +169,6 @@ public class Proprietario {
 		return true;
 	}
 
-	
-	
+
 	
 }
